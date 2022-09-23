@@ -8,7 +8,6 @@
 
 constexpr static int PORT{8000};
 
-
 static void task_open_socket(void){
 
     std::string rx_buffer;
@@ -80,17 +79,59 @@ static void task_open_socket(void){
         }
     }
 }
+
+static void webcam_capturer(void){
+	cv::Mat frame;
+	//--- INITIALIZE VIDEOCAPTURE
+    cv::VideoCapture cap;
+    // open the default camera using default API
+    // cap.open(0);
+    // OR advance usage: select any API backend
+    int deviceID = 0;             // 0 = open default camera
+    int apiID = cv::CAP_ANY;      // 0 = autodetect default API
+    // open selected camera using selected API
+    cap.open(deviceID, apiID);
+    // check if we succeeded
+    if (!cap.isOpened()) {
+        printf("ERROR! Unable to open camera\n");
+        return;
+    }
+
+    //--- GRAB AND WRITE LOOP
+    printf("Start grabbing\nPress any key to terminate\n");
+
+    // for (;;)
+    {
+        // wait for a new frame from camera and store it into 'frame'
+        cap.read(frame);
+        // check if we succeeded
+        if (frame.empty()) {
+            printf("ERROR! blank frame grabbed\n");
+            // break;
+        }
+        // Turn the frame into gray scale (check size X performance)
+        cv::cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
+
+        // show live and wait for a key with timeout long enough to show images
+        cv::imshow("Live", frame);
+        cv::waitKey(5);        
+    }
+    // the camera will be deinitialized automatically in VideoCapture destructor
+
+	std::vector<uchar> array;
+	if (frame.isContinuous()) {
+  		array.assign(frame.data, frame.data + frame.total()*frame.channels());
+	}
+	printf("size of vector: %lu\n", array.size());
+	
+	return;
+}
  
 int main() 
 { 
-	// Read the image file 
-	cv::Mat image = cv::imread("/home/magno/Pictures/highway.jpg");
-	cv::namedWindow("Display Image", cv::WINDOW_AUTOSIZE );
-	cv::imshow("Display Image", image);
-	cv::waitKey(0);
-
-	task_open_socket();
-
+	webcam_capturer();
+	
+	// task_open_socket();
 
 	return 0; 
 }

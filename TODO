@@ -1,5 +1,7 @@
 TODO
 Serialize opencv data
+send data using sockets
+divide into two different threads
 
 Done
 server side socket
