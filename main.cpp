@@ -3,6 +3,7 @@
 #include <netinet/tcp.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <opencv2/opencv.hpp> 
 
@@ -111,12 +112,15 @@ static void webcam_capturer(void){
             printf("ERROR! blank frame grabbed\n");
             // break;
         }
+		cv::resize(frame,frame,cv::Size(360, 180), cv::INTER_LINEAR);
+
         // Turn the frame into gray scale (check size X performance)
         cv::cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
+        std::cout<<frame.size()<<"\n";
 
         // show live and wait for a key with timeout long enough to show images
-        cv::imshow("Live", frame);
-        cv::waitKey(0);        
+        // cv::imshow("Live", frame);
+        // cv::waitKey(0);        
     }
     // the camera will be deinitialized automatically in VideoCapture destructor
 
@@ -138,7 +142,7 @@ int main()
     printf("Unable to send the message: errno: %s\n", strerror(errno));
 
 	assert(send_err != -1);
-
+	
 	shutdown(listen_sock, 0);
     close(listen_sock);
 	
