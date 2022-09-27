@@ -1,7 +1,11 @@
 TODO
-Serialize opencv data
-send data using sockets
+Test udp
 divide into two different threads
+decrease the transmission delay
 
 Done
+add Continuos transmission
+Receive data using Python
+Serialize opencv data
+send data using sockets
 server side socket
