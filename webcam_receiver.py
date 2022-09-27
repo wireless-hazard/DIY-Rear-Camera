@@ -2,7 +2,7 @@ import socket
 import cv2, time
 import numpy as np
 
-HOST_IP = "127.0.0.1"
+HOST_IP = "192.168.5.110"
 HOST_PORT = 8000
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

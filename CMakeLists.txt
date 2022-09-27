@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.7)
 
 project(rear_view)
 find_package( OpenCV REQUIRED )
