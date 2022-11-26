@@ -2,7 +2,7 @@ import socket
 import cv2, time
 import numpy as np
 
-HOST_IP = "192.168.5.110"
+HOST_IP = "192.168.0.72"
 HOST_PORT = 8000
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -16,4 +16,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		image = np.reshape(np.frombuffer(data, np.uint8), (180,360))
 
 		cv2.imshow("WindowNameHere", image)
-		cv2.waitKey(1000)
+		cv2.waitKey(100)

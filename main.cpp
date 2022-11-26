@@ -145,7 +145,6 @@ int main()
     	printf("Unable to send the message: errno: %s\n", strerror(errno));
 
 		if(send_err == -1)break;
-		sleep(1);
 	}
 	shutdown(listen_sock, 0);
     close(listen_sock);

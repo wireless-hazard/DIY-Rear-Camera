@@ -1,9 +1,9 @@
 TODO
 Test udp
 divide into two different threads
-decrease the transmission delay
 
 Done
+decrease the transmission delay (server without delay / client with delay)
 add Continuos transmission
 Receive data using Python
 Serialize opencv data
