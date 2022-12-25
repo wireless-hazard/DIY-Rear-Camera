@@ -29,21 +29,37 @@ def fixed_amount_reading(host_ip):
 			if not data:
 				break;
 			video.append(data)
-			
-	out = cv2.VideoWriter("camera.avi", fourcc=cv2.VideoWriter_fourcc(*"DIVX"), fps=24, frameSize=(180,360),isColor=True)
-
-	for image in video:
-		image = np.reshape(np.frombuffer(image, np.uint8), (180,360))
-		print(type(image))
-		cv2.imshow("Recorded Video", image)
-		cv2.waitKey(10)
-		#out.write(image)
-	out.release()
+		
 
 def manipulate_video():
-	print(type(video))
-	print(np.size(video[0]))
-	print(type(video[0]))
+
+
+
+
+	for frame in video:
+		frame = np.reshape(np.frombuffer(frame, np.uint8), (180,360))
+
+		face_cascade = cv2.CascadeClassifier("/usr/local/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
+		eyes_cascade = cv2.CascadeClassifier("/usr/local/share/opencv4/haarcascades/haarcascade_frontalface_default.xml")
+
+
+		frame_gray = cv2.equalizeHist(frame)
+		faces = face_cascade.detectMultiScale(frame_gray)
+
+		for (x,y,w,h) in faces:
+			center = (x + w//2, y + h//2)
+			frame = cv2.ellipse(frame, center, (w//2, h//2), 0, 0, 360, (255, 0, 255), 4)
+			faceROI = frame_gray[y:y+h,x:x+w]
+			#-- In each face, detect eyes
+			eyes = eyes_cascade.detectMultiScale(faceROI)
+			for (x2,y2,w2,h2) in eyes:
+				eye_center = (x + x2 + w2//2, y + y2 + h2//2)
+				radius = int(round((w2 + h2)*0.5))
+				frame = cv2.circle(frame, eye_center, radius, (255, 0, 0 ), 4)
+
+		cv2.imshow("Recorded Video", frame)
+		cv2.waitKey(10)
+
 
 def main(host_ip):
 	fixed_amount_reading(host_ip)
