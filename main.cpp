@@ -12,9 +12,8 @@ static int listen_sock;
 
 static void socket_listen(void)
 {
-    std::string rx_buffer;
-    int addr_family;
-    int ip_protocol;
+    int addr_family{AF_INET};
+    int ip_protocol{IPPROTO_IP};
 
     int nodelay = 1;    
 
@@ -22,8 +21,6 @@ static void socket_listen(void)
     dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     dest_addr.sin_family = AF_INET;
     dest_addr.sin_port = htons(PORT);
-    addr_family = AF_INET;
-    ip_protocol = IPPROTO_IP;
 
 	listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
     // setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, (void *)&nodelay, sizeof(int));
@@ -36,14 +33,14 @@ static void socket_listen(void)
 
     int err = bind(listen_sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
     if (err != 0) {
-        printf("Socket unable to bind: errno %s\n", strerror(errno));
+        printf("Socket unable to bind: %s\n", strerror(errno));
         abort();
     }
     printf("Socket bound, port %d\n", PORT);
 
     err = listen(listen_sock, 1);
     if (err != 0) {
-        printf("Error occurred during listen: errno %s\n", strerror(errno));
+        printf("Error during listening phase: %s\n", strerror(errno));
         abort();
     }
     printf("Socket listening\n");
@@ -90,19 +87,17 @@ int main()
 
     local_cam.Init();
 
+    int send_err;
 
-	while(true)
-	{
-		local_cam.CaptureVideo();
+	do {
 
-		int send_err = send(listen_sock, local_cam.data(), local_cam.size(), 0);
+        local_cam.CaptureVideo();
+        send_err = send(listen_sock, local_cam.data(), local_cam.size(), 0);
+        
+	} while(send_err != -1);
 
-		if(send_err == -1)
-        {
-            printf("Unable to send the message: errno: %s\n", strerror(errno));
-            break;
-        }
-	}
+    printf("Unable to send the message: errno: %s\n", strerror(errno));
+
 	shutdown(listen_sock, 0);
     close(listen_sock);
 	

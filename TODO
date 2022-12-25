@@ -6,6 +6,7 @@ TODO
 Test udp
 divide into two different threads
 clear program exiting
+add error code reporting
 
 Doing
 make the video recording continuos
@@ -19,3 +20,4 @@ Receive data using Python
 Serialize opencv data
 send data using sockets
 server side socket
+moved the webcam functions to a separated class
