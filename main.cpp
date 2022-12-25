@@ -24,14 +24,14 @@ static void socket_listen(void)
 
 	listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
     // setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, (void *)&nodelay, sizeof(int));
-    setsockopt(listen_sock, IPPROTO_TCP, SO_REUSEADDR, (void *)&nodelay, sizeof(int));
+    setsockopt(listen_sock, IPPROTO_TCP, SO_REUSEADDR, reinterpret_cast<void *>(&nodelay), sizeof(int));
     if (listen_sock < 0) {
         printf("Unable to create socket: errno %s\n", strerror(errno));
         abort();
     }
     printf("Socket created\n");
 
-    int err = bind(listen_sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+    int err = bind(listen_sock, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr));
     if (err != 0) {
         printf("Socket unable to bind: %s\n", strerror(errno));
         abort();
@@ -51,7 +51,7 @@ static void accept_connection(void)
 {
 	struct sockaddr_in6 source_addr; // Large enough for both IPv4 or IPv6
     uint addr_len = sizeof(source_addr);
-    listen_sock = accept(listen_sock, (struct sockaddr *)&source_addr, &addr_len);
+    listen_sock = accept(listen_sock, reinterpret_cast<struct sockaddr *>(&source_addr), &addr_len);
 
     if (listen_sock < 0) 
     {
@@ -93,7 +93,7 @@ int main()
 
         local_cam.CaptureVideo();
         send_err = send(listen_sock, local_cam.data(), local_cam.size(), 0);
-        
+
 	} while(send_err != -1);
 
     printf("Unable to send the message: errno: %s\n", strerror(errno));

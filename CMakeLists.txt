@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
 project(rear_view)
+add_compile_options(-Wall -Wextra -pedantic -Werror -fsized-deallocation -Wno-exceptions -Wold-style-cast -Wuseless-cast -O3)
 find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
