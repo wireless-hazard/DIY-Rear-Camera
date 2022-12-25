@@ -1,8 +1,18 @@
+Requirements
+The user shall not need to hardcode IP addresses
+The user shall perceive the transmission as real time
+
 TODO
 Test udp
 divide into two different threads
+clear program exiting
+
+Doing
+make the video recording continuos
+
 
 Done
+Receive IP as parameters on the python script
 decrease the transmission delay (server without delay / client with delay)
 add Continuos transmission
 Receive data using Python
