@@ -2,15 +2,23 @@
 
 #include <stdio.h>
 #include <opencv2/opencv.hpp> 
+#include <optional>
 
 namespace webcam {
 
 typedef struct {
 public:
-	inline void Init(void)
+	inline void Init(std::optional<std::string> cam_path = {})
 	{
-		// open the default camera using default API
-		cap.open(0);
+		// open the default camera using default API if no value was passed
+		if (cam_path.has_value())
+		{
+			cap.open(cam_path.value());
+		}
+		else
+		{
+			cap.open(0);
+		}
 		// OR advance usage: select any API backend
 		//int deviceID = 0;             // 0 = open default camera
 		//int apiID = cv::CAP_ANY;      // 0 = autodetect default API
@@ -26,6 +34,7 @@ public:
 	}
 
 	void CaptureVideo(void);
+	cv::Mat CaptureFrame(bool show_frame=false);
 	inline const void *data(void) const { return this->array.data();}
 	inline size_t size(void) const { return this->array.size();} 
 private:

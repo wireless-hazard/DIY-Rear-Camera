@@ -4,7 +4,6 @@ void webcam::sampler_t::CaptureVideo(void)
 {
 	//--- GRAB AND WRITE LOOP
 
-
     // wait for a new frame from camera and store it into 'frame'
     cap.read(this->frame);
     // check if we succeeded
@@ -32,4 +31,29 @@ void webcam::sampler_t::CaptureVideo(void)
     #endif
 	
 	return;
+}
+
+cv::Mat webcam::sampler_t::CaptureFrame(bool show_frame)
+{
+	cv::Mat local_frame;
+	/* wait for a new frame from camera and store it into 'frame'
+	At each reading, it fills (for whatever reason, 5 frames, so
+	I'm discarding the other 4)*/
+    cap.read(local_frame); /*Reading 1*/
+    cap.read(local_frame); /*Reading 2*/
+    cap.read(local_frame); /*Reading 3*/
+    cap.read(local_frame); /*Reading 4*/
+    cap.read(local_frame); /*Reading 5 - Frame returned*/
+    // check if we succeeded
+    if (local_frame.empty()) {
+        printf("ERROR! blank frame grabbed\n");
+    }
+
+    if (show_frame)
+    {
+    	cv::imshow("Live", local_frame);
+    	cv::waitKey(0); 	
+    }
+
+    return local_frame;
 }

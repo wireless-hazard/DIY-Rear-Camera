@@ -1,6 +1,7 @@
 Requirements
 The user shall not need to hardcode IP addresses
 The user shall perceive the transmission as real time
+(uncertain) the live video shall be provided via a website
 
 TODO
 Test udp
